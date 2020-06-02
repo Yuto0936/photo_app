@@ -1,0 +1,68 @@
+{% extends 'myapp/base.html' %}
+
+
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<section class='section'>
+        <div class='columns'>
+            <div class='column is-offset-4 is-4'>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class='field has-addons'>
+                        <div class='control is-expanded'>
+                            {{ form.name }}
+                        </div>
+                        <div class='control'>
+                            <button type='submit' class='button is-info'>
+                                Add City
+                            </button>
+                        </div>
+                    </div>
+                    {% if message %}
+                    <div class="alert {{ message_class }}">{{ message }}</div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+</section>
+{% endif %}
+<section class='section'>
+            <div class='columns'>
+                {% for city_weather in weather_data %}
+                <div class='box mr-5'>
+                    <article class='media'>
+                            <figure class='image is-50×50'>
+                                <img src="http://openweathermap.org/img/w/{{ city_weather.icon }}.png" alt="Image">
+                            </figure>
+                        <div class='media-content'>
+                            <div class='content'>
+                                <p>
+                                    <span class='title'>{{ city_weather.city }}</span>
+                                    <br>
+                                    <span class='subtitle'>{{ city_weather.temperature }} °C</span>
+                                    <br> {{ city_weather.description }}
+                                </p>
+                            </div>
+                        </div>
+                        {% if request.user.is_authenticated %}
+                        <div class='media-right'>
+                            <a href="{% url 'myapp:delete_city' city_weather.city %}">
+                                <button class='delete'></button>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </article>
+                </div>
+                {% endfor %}
+        </div>
+</section>
+
+{% if category %}
+    <h2>カテゴリー：{{ category.title }}の検索結果</h2>
+{% endif %}
+
+
+{% include 'myapp/photos_list.html' %}
+
+{% endblock %}
