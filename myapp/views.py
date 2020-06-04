@@ -130,6 +130,20 @@ def photos_delete(request, pk):
     return redirect('myapp:users_detail', request.user.id)
 
 
+@login_required
+def edit(request, pk):
+    photo = get_object_or_404(Photo, pk=pk)
+    if request.method == 'POST':
+        form = PhotoForm(request.POST,request.FILES, instance=photo)
+        if form.is_valid():
+            form.save()
+            return redirect('myapp:photos_detail', pk=pk)
+    else:
+        form = PhotoForm(instance=photo)
+    context = {'form': form, 'photo': photo}
+    return render(request, 'myapp/edit.html', context)
+
+
 def photos_category(request, category):
     # titleがURLの文字列と一致するCategoryインスタンスを取得
     category = Category.objects.get(title=category)
