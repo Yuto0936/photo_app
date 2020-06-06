@@ -1,8 +1,0 @@
-*.pyc
-*~
-/.vscode
-__pycache__
-myDjangoEnv
-db.sqlite3
-/static
-.DS_Store
